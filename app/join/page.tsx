@@ -102,10 +102,19 @@ export default function JoinGame() {
 
       if (playerError) throw playerError;
 
+      /* Куди вести гравця — залежить від режиму кімнати.
+       * Класичний бункер і RM-бункер мають окремі лобі й окремі
+       * ігрові екрани, тож маршрут обираємо за game_mode. */
+      const isClassic = room.game_mode === "classic";
+
       router.push(
-        `/lobby?room=${room.code}&player=${encodeURIComponent(
-          player.name
-        )}`
+        isClassic
+          ? `/classic/lobby?room=${room.code}&player=${encodeURIComponent(
+              player.name
+            )}`
+          : `/lobby?room=${room.code}&player=${encodeURIComponent(
+              player.name
+            )}`
       );
     } catch (error) {
       console.error(error);
@@ -120,7 +129,7 @@ export default function JoinGame() {
     <main className="min-h-screen bg-black text-white flex items-center justify-center px-6">
       <div className="w-full max-w-lg">
         <p className="mb-4 text-sm uppercase tracking-[0.3em] text-red-500">
-          INWEB / BUNKER
+          BUNKER
         </p>
 
         <h1 className="text-5xl font-black">
@@ -128,12 +137,12 @@ export default function JoinGame() {
         </h1>
 
         <p className="mt-4 text-gray-400">
-          Введи своє ім'я та код кімнати.
+          Введи своє ім&apos;я та код кімнати. Режим визначиться сам.
         </p>
 
         <div className="mt-10">
           <label className="mb-2 block text-sm text-gray-400">
-            Твоє ім'я
+            Твоє ім&apos;я
           </label>
 
           <input
