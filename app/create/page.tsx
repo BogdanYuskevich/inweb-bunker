@@ -40,6 +40,10 @@ export default function CreateGame() {
           code: roomCode,
           host_name: hostName,
           status: "waiting",
+          /* Режим кімнати. За ним /join вирішує, куди вести гравця —
+           * у RM-лобі чи в класичне. Без цього поля кімната отримає
+           * default 'classic' і всіх поведе в класику. */
+          game_mode: "rm",
           game_stage: "waiting",
           game_phase: "waiting",
           game_round: 0,
@@ -69,7 +73,7 @@ export default function CreateGame() {
     <main className="min-h-screen bg-black text-white flex items-center justify-center px-6">
       <div className="w-full max-w-lg">
         <p className="mb-4 text-sm uppercase tracking-[0.3em] text-red-500">
-          INWEB / BUNKER
+          🛠️ RM БУНКЕР
         </p>
 
         <h1 className="text-5xl font-black">
@@ -82,7 +86,7 @@ export default function CreateGame() {
 
         <div className="mt-10">
           <label className="mb-2 block text-sm text-gray-400">
-            Ім'я Game Master
+            Ім&apos;я Game Master
           </label>
 
           <input
