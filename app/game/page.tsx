@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "../../lib/supabase";
 
@@ -668,7 +668,7 @@ function characterValue(character: Character, field: CharacterField) {
   return character[field];
 }
 
-export default function GamePage() {
+function GamePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -4800,5 +4800,24 @@ export default function GamePage() {
         </div>
       </div>
     </main>
+  );
+}
+
+/* useSearchParams() читає параметри з URL, тому сторінку треба
+ * обгорнути в Suspense — інакше Next не може зробити пре-рендеринг. */
+export default function GamePage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-black text-white flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-5xl">☢️</div>
+            <p className="mt-4 text-gray-400">Завантаження бункера...</p>
+          </div>
+        </main>
+      }
+    >
+      <GamePageContent />
+    </Suspense>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "../../lib/supabase";
 import {
@@ -74,7 +74,7 @@ function getBunkerCapacity(playerCount: number) {
   return Math.floor(Math.random() * 4) + 5;
 }
 
-export default function LobbyPage() {
+function LobbyPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -617,5 +617,24 @@ export default function LobbyPage() {
         </section>
       </div>
     </main>
+  );
+}
+
+/* useSearchParams() читає параметри з URL, тому сторінку треба обгорнути
+ * в Suspense — інакше Next не може зробити пре-рендеринг і збірка падає. */
+export default function LobbyPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-black text-white flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-5xl">☢️</div>
+            <p className="mt-4 text-gray-400">Завантаження лобі...</p>
+          </div>
+        </main>
+      }
+    >
+      <LobbyPageContent />
+    </Suspense>
   );
 }
